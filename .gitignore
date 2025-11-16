@@ -1,0 +1,25 @@
+# Python / Backend
+__pycache__/
+*.pyc
+venv/
+.venv/
+uploads/
+*.sqlite
+*.log
+
+# Node / Frontend
+frontend/node_modules/
+frontend/build/
+
+# Model files
+glove.6B.100d.txt
+*.bin
+*.h5
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDEs
+.vscode/
+.idea/
