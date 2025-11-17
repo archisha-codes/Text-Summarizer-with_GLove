@@ -77,7 +77,7 @@ export default function App() {
     if (!text.trim()) { alert("Please enter text to summarize."); return; }
     setLoading(true); setSummary("");
     try {
-      const res = await axios.post("/api/summarize", { text, sentences: n }, { timeout: 30000 });
+      const res = await axios.post("http://localhost:5000/api/summarize", { text, sentences: n }, { timeout: 30000 });
       setSummary(res.data.summary || "— No summary returned —");
     } catch (err) {
       console.error("Summarize error:", err);
@@ -88,7 +88,7 @@ export default function App() {
   async function handleDatasetSummarize(count = 5) {
     setDsLoading(true);
     try {
-      const res = await axios.get(`/api/summarize-dataset?n=${count}`, { timeout: 60000 });
+      const res = await axios.get(`http://localhost:5000/api/summarize-dataset?n=${count}`, { timeout: 60000 });
       setDataset(res.data.results || []);
       alert(`Dataset summaries generated: ${res.data.count || (res.data.results || []).length}`);
     } catch (err) {
@@ -106,7 +106,7 @@ export default function App() {
     setUploading(true); setUploadProgress(0);
     const fd = new FormData(); fd.append("file", f);
     try {
-      const res = await axios.post("/api/upload-dataset", fd, {
+      const res = await axios.post("http://localhost:5000/api/upload-dataset", fd, {
         headers: { "Content-Type": "multipart/form-data" },
         onUploadProgress: (p) => { if (p.total) setUploadProgress(Math.round((p.loaded / p.total) * 100)); },
         timeout: 120000
@@ -208,7 +208,7 @@ export default function App() {
             </div>
 
             <div className="controls lower-controls">
-              <a className="link" href="/api/summarize-dataset?n=5" target="_blank" rel="noreferrer">Download last CSV</a>
+              <a className="link" href="http://localhost:5000/api/summarize-dataset?n=5" target="_blank" rel="noreferrer">Download last CSV</a>
               <div>
                 <button className="btn-ghost" onClick={()=>handleDatasetSummarize(5)} disabled={dsLoading}>{dsLoading ? 'Working…' : 'Summarize Dataset'}</button>
               </div>
