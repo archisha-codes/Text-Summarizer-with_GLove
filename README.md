@@ -141,8 +141,8 @@ Frontend runs at:
 
 ## 📝 Author
 
-Created by **Zia**\
-Machine Learning + Full Stack Developer
+Created by **Archisha**\
+
 
 ------------------------------------------------------------------------
 
