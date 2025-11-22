@@ -1,151 +1,213 @@
-# Text Summarizer Full Project (with GloVe)
+# 📘 **Text Summarizer – NLP + GloVe + React Full-Stack Project**
 
-This project is a complete **NLP Text Summarization System** featuring:
+A complete **end-to-end Text Summarization System** built using **Python (Flask)**, **NLP preprocessing**, **GloVe word embeddings**, and a **React.js frontend**.
+The system allows users to input long text and instantly generate a clean, meaningful summary.
 
--   **Backend (Python + NLP + GloVe)**
--   **Frontend (React.js)**
--   **REST API Integration**
--   **Dataset View & Summary Output**
--   **Machine Learning / NLP Preprocessing Pipeline**
+This project demonstrates your skills in:
 
-------------------------------------------------------------------------
+* Machine Learning / NLP
+* Full-stack development
+* API design
+* Frontend–backend integration
+* Real-world deployment structure
 
-## 📁 Project Structure
+---
 
-    text_summarizer_full_project_with_glove(FINAL)
-    │
-    ├── backend/
-    │   ├── app.py                 # Flask API backend
-    │   ├── model.py               # Summarizer logic
-    │   ├── preprocess.py          # NLP cleaning/tokenization utilities
-    │   ├── glove/                 # Embeddings
-    │   └── requirements.txt       # Backend dependencies
-    │
-    ├── frontend/
-    │   ├── src/
-    │   │   ├── App.js             # Main UI logic
-    │   │   ├── components/
-    │   │   │   └── DatasetTable.js
-    │   │   ├── index.js
-    │   │   └── index.css
-    │   ├── public/index.html
-    │   └── package.json
-    │
-    └── README.md (this file)
+# ⭐ **Project Overview**
 
-------------------------------------------------------------------------
+The Text Summarizer is designed to automate the process of reducing long text into concise summaries using Natural Language Processing (NLP).
 
-## 🚀 Features
+It consists of:
 
-### **Backend**
+### ✅ **1. Backend — Flask + NLP + GloVe**
 
--   Clean text using NLP (tokenization, stopwords, lemmatization)
--   Generate text summaries using NLP algorithms
--   Integrates **GloVe word embeddings**
--   REST API endpoint:
-    -   `/summarize` → returns generated summary\
-    -   `/upload` → optional dataset upload
+Handles:
 
-### **Frontend (React.js)**
+* Text preprocessing
+* Tokenization
+* Lemmatization
+* Stopword removal
+* Vector generation using **GloVe embeddings**
+* Sentence ranking
+* Summary extraction
 
--   Clean and simple UI
--   Input box for text
--   Summary output display
--   Dataset table preview
--   Connected to backend using fetch/axios
+### ✅ **2. Frontend — React.js + Vite**
 
-------------------------------------------------------------------------
+Provides:
 
-## 🔧 Installation & Setup
+* A clean UI
+* Input box for long text
+* Instant summary display
+* Table for dataset preview (optional)
+* Smooth API communication
 
-### 1️⃣ **Backend Setup**
+---
 
-    cd backend
-    pip install -r requirements.txt
-    python app.py
+# 🏗️ **Project Structure**
 
-Server starts at:
+```
+text-summarizer/
+│
+├── backend/
+│   ├── app.py                 # Flask server and API endpoints
+│   ├── model.py               # Summarization logic
+│   ├── preprocess.py          # Text cleaning & NLP utilities
+│   ├── glove/                 # GloVe embeddings (large files NOT in GitHub)
+│   ├── requirements.txt
+│
+├── frontend/
+│   ├── src/
+│   │   ├── App.js             # Main UI logic
+│   │   ├── components/
+│   │   │   └── DatasetTable.js
+│   │   ├── index.js
+│   │   └── index.css
+│   ├── public/index.html
+│   └── package.json
+│
+└── README.md
+```
 
-    http://localhost:5000
+---
 
-------------------------------------------------------------------------
+# 🚀 **Features**
 
-### 2️⃣ **Frontend Setup**
+### 🔹 NLP-Powered Summaries
 
-    cd frontend
-    npm install
-    npm run dev
+Uses tokenization, lemmatization, GloVe embeddings & similarity ranking to generate extractive summaries.
 
-Frontend runs at:
+### 🔹 Clean React Interface
 
-    http://localhost:5173
+Interactive UI for typing/pasting long text and receiving summaries in seconds.
 
-------------------------------------------------------------------------
+### 🔹 Full-Stack Integration
 
-## 🔗 API Usage
+Backend Flask API → consumed by React frontend using Axios.
+
+### 🔹 Dataset Table Component
+
+Shows uploaded data (optional), useful for demos or summarizing multiple entries.
+
+---
+
+# 🧠 **How the Summarizer Works (NLP Logic)**
+
+1. **Text Cleaning**
+   Remove punctuation, lowercase, stopwords, unwanted symbols, etc.
+
+2. **Sentence Tokenization**
+   Split text into meaningful sentences.
+
+3. **Vector Generation (GloVe)**
+   Convert each word into a dense embedding vector.
+   Average embeddings → sentence vectors.
+
+4. **Sentence Similarity Graph**
+   Use cosine similarity to form a graph of sentence relations.
+
+5. **Sentence Ranking**
+   Higher-importance sentences bubble to the top.
+
+6. **Summary Generation**
+   Pick top-ranked sentences → combine → final summary.
+
+---
+
+# 🖥️ **Frontend UI Flow**
+
+* User pastes long text
+* Click **Summarize**
+* Frontend sends POST request to backend
+* Backend responds with `"summary": "..."`
+* UI displays the summarized output cleanly
+
+---
+
+# 🔧 **Installation & Setup**
+
+## **1️⃣ Backend Setup (Flask)**
+
+```
+cd backend
+pip install -r requirements.txt
+python app.py
+```
+
+Server runs at:
+
+```
+http://localhost:5000
+```
+
+---
+
+## **2️⃣ Frontend Setup (React + Vite)**
+
+```
+cd frontend
+npm install
+npm run dev
+```
+
+Runs at:
+
+```
+http://localhost:5173
+```
+
+---
+
+# 🔗 **API Endpoints**
 
 ### **POST /summarize**
 
-**Request Body:**
+Generate summary.
 
-``` json
+#### Request:
+
+```json
 {
-  "text": "your long paragraph"
+  "text": "Your long paragraph"
 }
 ```
 
-**Response:**
+#### Response:
 
-``` json
+```json
 {
-  "summary": "shortened summary"
+  "summary": "Short meaningful summary"
 }
 ```
 
-------------------------------------------------------------------------
+---
 
-## ⚙️ How the Summarizer Works
+# 💡 **Technologies Used**
 
-1.  Text cleaning → punctuation removal, stopwords, lemmatization\
-2.  Vectorization with **GloVe embeddings**\
-3.  Sentence ranking using similarity metrics\
-4.  Summary extraction
+### **Backend**
 
-------------------------------------------------------------------------
+* Python
+* Flask
+* NLTK
+* NumPy
+* GloVe Word Embeddings
 
-## 📦 Running the Full Integrated Project
+### **Frontend**
 
-1.  Start backend\
-2.  Start frontend\
-3.  Enter paragraph → click *Summarize*\
-4.  View output instantly
+* React.js
+* Vite
+* Axios
+* CSS
 
-------------------------------------------------------------------------
+---
 
-## 🛠 Tech Stack
+# 👤 **Author**
 
-### **Backend:**
+**Archisha**
+ML Engineer • Full-Stack Developer
 
--   Python
--   Flask
--   NLTK
--   GloVe Embeddings
+---
 
-### **Frontend:**
-
--   React.js
--   Vite
--   Axios
-
-------------------------------------------------------------------------
-
-## 📝 Author
-
-Created by **Archisha**\
-
-
-------------------------------------------------------------------------
-
-## 📜 License
+# 📜 **License**
 
 MIT License
+
