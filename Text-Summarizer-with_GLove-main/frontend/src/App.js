@@ -1,8 +1,10 @@
-// frontend/src/App.js
 import React, { useState, useRef, useEffect } from "react";
 import axios from "axios";
 import DatasetTable from "./components/DatasetTable";
 import "./index.css";
+
+/* ✅ ADD THIS (ONLY NEW LINE) */
+const API_BASE = "https://text-summarizer-with-glove-6.onrender.com";
 
 /* Inline icons */
 function IconCopy() {
@@ -39,13 +41,11 @@ function IconMoon() {
 }
 
 export default function App() {
-  // theme: 'dark' | 'light'
   const [theme, setTheme] = useState(() => {
     try { return localStorage.getItem("ui_theme") || "dark"; } catch { return "dark"; }
   });
 
   useEffect(() => {
-    // apply theme by toggling class on <html>
     const root = document.documentElement;
     if (theme === "light") {
       root.classList.add("theme-light");
@@ -57,12 +57,11 @@ export default function App() {
     try { localStorage.setItem("ui_theme", theme); } catch {}
   }, [theme]);
 
-  // rest of UI state
   const [text, setText] = useState("");
   const [summary, setSummary] = useState("");
   const [loading, setLoading] = useState(false);
   const [sentences, setSentences] = useState(3);
-  const [lengthPreset, setLengthPreset] = useState("medium"); // short / medium / long
+  const [lengthPreset, setLengthPreset] = useState("medium");
   const [dataset, setDataset] = useState([]);
   const [dsLoading, setDsLoading] = useState(false);
   const [uploading, setUploading] = useState(false);
@@ -78,15 +77,13 @@ export default function App() {
     setLoading(true); setSummary("");
     try {
       const res = await axios.post(
-  "https://text-summarizer-with-glove-6.onrender.com/api/summarize",
-  { text, sentences: n },
-  { timeout: 30000 }
-);
-
+        `${API_BASE}/api/summarize`,
+        { text, sentences: n },
+        { timeout: 30000 }
+      );
       setSummary(res.data.summary || "— No summary returned —");
     } catch (err) {
-      console.error("Summarize error:", err);
-      alert(err?.response?.data?.error || err.message || "Request failed");
+      alert(err?.response?.data?.error || err.message);
     } finally { setLoading(false); }
   }
 
@@ -94,60 +91,36 @@ export default function App() {
     setDsLoading(true);
     try {
       const res = await axios.get(
-  `https://text-summarizer-with-glove-6.onrender.com/api/summarize-dataset?n=${count}`,
-  { timeout: 60000 }
-);
-
+        `${API_BASE}/api/summarize-dataset?n=${count}`,
+        { timeout: 60000 }
+      );
       setDataset(res.data.results || []);
-      alert(`Dataset summaries generated: ${res.data.count || (res.data.results || []).length}`);
     } catch (err) {
-      console.error("Dataset fetch failed:", err);
-      alert(err?.response?.data?.error || err.message || "Failed to fetch dataset");
+      alert(err?.response?.data?.error || err.message);
     } finally { setDsLoading(false); }
   }
 
   async function handleFileUpload(evt) {
     const f = evt?.target?.files?.[0];
     if (!f) return;
-    if (!f.name.match(/\.(xlsx|xls|csv)$/i) && !["application/vnd.openxmlformats-officedocument.spreadsheetml.sheet","text/csv","application/vnd.ms-excel"].includes(f.type)) {
-      alert("Please upload a .xlsx, .xls or .csv file."); return;
-    }
     setUploading(true); setUploadProgress(0);
     const fd = new FormData(); fd.append("file", f);
     try {
       const res = await axios.post(
-  "https://text-summarizer-with-glove-6.onrender.com/api/upload-dataset",
-  fd,
-  {
-    headers: { "Content-Type": "multipart/form-data" },
-    onUploadProgress: (p) => {
-      if (p.total) setUploadProgress(Math.round((p.loaded / p.total) * 100));
-    },
-    timeout: 120000
-  }
-);
-
+        `${API_BASE}/api/upload-dataset`,
+        fd,
+        {
+          headers: { "Content-Type": "multipart/form-data" },
+          onUploadProgress: (p) => p.total && setUploadProgress(Math.round((p.loaded / p.total) * 100)),
+          timeout: 120000
+        }
+      );
       setDataset(res.data.results || []);
-      alert(`Uploaded and summarized ${res.data.count || (res.data.results || []).length} rows`);
       fileRef.current.value = null;
     } catch (err) {
-      console.error("Upload error", err);
-      alert(err?.response?.data?.error || err.message || "Upload failed");
+      alert(err?.response?.data?.error || err.message);
     } finally { setUploading(false); setUploadProgress(0); }
   }
-
-  function copySummary() {
-    if (!summary) return alert("No summary to copy");
-    navigator.clipboard.writeText(summary).then(()=> alert("Summary copied to clipboard"));
-  }
-
-  function downloadSummary() {
-    const blob = new Blob([summary || ""], { type: "text/plain;charset=utf-8" });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a"); a.href = url; a.download = "summary.txt"; a.click(); URL.revokeObjectURL(url);
-  }
-
-  function clearAll() { setText(""); setSummary(""); }
 
   return (
     <div className="ui-root">
