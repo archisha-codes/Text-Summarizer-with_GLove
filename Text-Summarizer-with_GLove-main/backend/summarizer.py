@@ -20,6 +20,32 @@ import logging
 import numpy as np
 import pandas as pd
 
+import nltk
+
+# =======================
+# NLTK PRODUCTION FIX
+# =======================
+
+# Writable directory for Render
+NLTK_DATA_DIR = "/opt/render/nltk_data"
+os.makedirs(NLTK_DATA_DIR, exist_ok=True)
+
+# Tell nltk where to look
+nltk.data.path.append(NLTK_DATA_DIR)
+
+# Download punkt if missing
+try:
+    nltk.data.find("tokenizers/punkt")
+except LookupError:
+    nltk.download("punkt", download_dir=NLTK_DATA_DIR)
+
+# Download stopwords if missing
+try:
+    nltk.data.find("corpora/stopwords")
+except LookupError:
+    nltk.download("stopwords", download_dir=NLTK_DATA_DIR)
+
+
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 import networkx as nx
